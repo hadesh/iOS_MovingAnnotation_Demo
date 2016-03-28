@@ -7,7 +7,7 @@
 //
 
 #import "AppDelegate.h"
-#import "MAMapKit.h"
+#import <MAMapKit/MAMapKit.h>
 #import "ViewController.h"
 
 @implementation AppDelegate

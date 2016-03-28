@@ -7,7 +7,7 @@
 //
 
 #import "ViewController.h"
-#import "MAMapKit.h"
+#import <MAMapKit/MAMapKit.h>
 #import "MovingAnnotationView.h"
 #import "TracingPoint.h"
 #import "Util.h"
