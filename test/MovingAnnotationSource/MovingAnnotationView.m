@@ -17,7 +17,7 @@
 #define MapYAnimationKey @"mapy"
 #define RotationAnimationKey @"transform.rotation.z"
 
-@interface MovingAnnotationView()
+@interface MovingAnnotationView()<CAAnimationDelegate>
 
 @property (nonatomic, strong) NSMutableArray * animationList;
 

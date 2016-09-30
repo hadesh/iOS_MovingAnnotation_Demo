@@ -30,7 +30,7 @@
 
 - (void)initRoute
 {
-    _duration = 8.0;
+    _duration = 10.0;
     
     NSUInteger count = 14;
     CLLocationCoordinate2D * coords = malloc(count * sizeof(CLLocationCoordinate2D));
@@ -112,15 +112,30 @@
     [carView addTrackingAnimationForPoints:_tracking duration:_duration];
 }
 
+- (void)stop
+{
+    MovingAnnotationView * carView = (MovingAnnotationView *)[self.map viewForAnnotation:self.car];
+
+    [carView.layer removeAllAnimations];
+}
+
 - (void)initBtn
 {
     UIButton * btn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    btn.frame = CGRectMake(0, self.view.frame.size.height * 0.2, 60, 20);
+    btn.frame = CGRectMake(0, 100, 60, 20);
     btn.backgroundColor = [UIColor grayColor];
     [btn setTitle:@"move" forState:UIControlStateNormal];
     [btn addTarget:self action:@selector(mov) forControlEvents:UIControlEventTouchUpInside];
 
     [self.view addSubview:btn];
+    
+    UIButton * btn1 = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    btn1.frame = CGRectMake(0, 200, 60, 20);
+    btn1.backgroundColor = [UIColor grayColor];
+    [btn1 setTitle:@"stop" forState:UIControlStateNormal];
+    [btn1 addTarget:self action:@selector(stop) forControlEvents:UIControlEventTouchUpInside];
+    
+    [self.view addSubview:btn1];
 }
 
 #pragma mark - Map Delegate
@@ -134,8 +149,9 @@
         MovingAnnotationView *annotationView = (MovingAnnotationView*)[mapView dequeueReusableAnnotationViewWithIdentifier:pointReuseIndetifier];
         if (annotationView == nil)
         {
-            annotationView = [[MovingAnnotationView alloc] initWithAnnotation:annotation
-                                                             reuseIdentifier:pointReuseIndetifier];
+            annotationView = [[MovingAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:pointReuseIndetifier];
+            
+            annotationView.canShowCallout = YES;
         }
         
         if ([annotation.title isEqualToString:@"Car"])
@@ -147,6 +163,7 @@
         }
         else if ([annotation.title isEqualToString:@"route"])
         {
+            annotationView.enabled = NO;
             annotationView.image = [UIImage imageNamed:@"trackingPoints.png"];
         }
 
@@ -156,11 +173,11 @@
     return nil;
 }
 
-- (MAPolylineView *)mapView:(MAMapView *)mapView viewForOverlay:(id<MAOverlay>)overlay
+- (MAPolylineRenderer *)mapView:(MAMapView *)mapView rendererForOverlay:(id<MAOverlay>)overlay
 {
     if ([overlay isKindOfClass:[MAPolyline class]])
     {
-        MAPolylineView *polylineView = [[MAPolylineView alloc] initWithPolyline:overlay];
+        MAPolylineRenderer *polylineView = [[MAPolylineRenderer alloc] initWithPolyline:overlay];
         
         polylineView.lineWidth   = 3.f;
         polylineView.strokeColor = [UIColor colorWithRed:0 green:0.47 blue:1.0 alpha:0.9];
@@ -169,6 +186,11 @@
     }
     
     return nil;
+}
+
+- (void)mapView:(MAMapView *)mapView didSelectAnnotationView:(MAAnnotationView *)view
+{
+    NSLog(@"cooridnate :%f, %f", view.annotation.coordinate.latitude, view.annotation.coordinate.longitude);
 }
 
 #pragma mark - Initialization
@@ -211,6 +233,11 @@
     [self.view addSubview:self.map];
     
     [self initBtn];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
     [self initAnnotation];
 }
 

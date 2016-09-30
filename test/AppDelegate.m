@@ -7,7 +7,6 @@
 //
 
 #import "AppDelegate.h"
-#import <MAMapKit/MAMapKit.h>
 #import "ViewController.h"
 
 @implementation AppDelegate
@@ -16,7 +15,6 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
-    [[MAMapServices sharedServices] setApiKey:@"4984bb62589b5f1e542e1bc96c6f1bda"];
     self.window.rootViewController =  [[ViewController alloc] init];
     [self.window makeKeyAndVisible];
 
