@@ -9,7 +9,10 @@
 #import <MAMapKit/MAMapKit.h>
 #import "TracingPoint.h"
 
-@interface MovingAnnotationView : MAPinAnnotationView
+/**
+ 动画AnnotationView，只试用于高德3D地图SDK。
+ */
+@interface MovingAnnotationView : MAAnnotationView
 
 /*!
  @brief 添加动画
